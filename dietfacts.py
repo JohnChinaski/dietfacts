@@ -1,6 +1,6 @@
 
 #Dietfacts aplication
-from odoo import models, fields
+from odoo import models, fields, api
 
 # Extend product.template model with calories
 
@@ -19,6 +19,17 @@ class DietFacts_res_user_meal(models.Model):
     meal_date = fields.Datetime('Menu Date')
     item_ids = fields.One2many('res.user.mealitem', 'meal_id')
     user_id = fields.Many2one('res.users', 'Meal User')
+
+    @api.one
+    @api.depends('item_ids', 'item_ids.servings')
+
+    def _calccalories(self):
+        currentcalories = 0
+        for mealitem in self.item_ids:
+            currentcalories += mealitem.item_id.calories
+        self.totalcalories = currentcalories
+
+    totalcalories = fields.Integer('Total Meal Calories', storage=True, compute= '_calccalories')
     notes = fields.Text('Meal Notes')
 
 class DietFacts_res_users_mealitem(models.Model):
