@@ -26,7 +26,7 @@ class DietFacts_res_user_meal(models.Model):
     def _calccalories(self):
         currentcalories = 0
         for mealitem in self.item_ids:
-            currentcalories += mealitem.item_id.calories
+            currentcalories += (mealitem.calories * mealitem.servings)
         self.totalcalories = currentcalories
 
     totalcalories = fields.Integer('Total Meal Calories', storage=True, compute= '_calccalories')
