@@ -21,7 +21,7 @@ class DietFacts_product_template(models.Model):
         currentscore = 0
         for nutrient in self.nutrients_id:
             currentscore += nutrient.value
-        self.nutrition_score = currentscore 
+        self.nutrition_score = currentscore
 
 
 class DietFacts_res_user_meal(models.Model):

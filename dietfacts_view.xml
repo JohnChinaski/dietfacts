@@ -99,8 +99,8 @@
                     </group>
 
                     <notebook>
-                        <page name="mealitems" string="Meal Item 111">
-                            <field name="item_ids" string="Meal Items 222">
+                        <page name="mealitems" string="Meal Item">
+                            <field name="item_ids" string="Meal Items">
                                 <tree string="Menu Items" editable="bottom">
                                     <field name="item_id" />
                                     <field name="calories" />
@@ -124,7 +124,7 @@
             <field name="view_mode" >tree,kanban,form</field >
             <field name="view_type" >form</field >
             <field name="view_id" ref="dietfacts_meal_tree_view" />
-            <!--<field name="context" >{"search_default_filter_to_sell":1}</field>-->
+            <field name="context" >{"search_default_filter_to_sell":1}</field>
             <!--<field name="domain">[('categ_id.name', '=', 'Diet Items')]</field>-->
             <field name="help" type= "html">
                 <p class="oe_view_nocontent_create" >
@@ -132,9 +132,6 @@
                 </p>
             </field>
         </record>
-
-
-
 
 
         <menuitem id="menu_product_template_action_dietfacts"
@@ -147,6 +144,45 @@
                   parent="sale.product_menu_catalog"
                   sequence="3"/>
 
+        <template id="product.nutrition">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <h1>Nutrition Report</h1>
+                            <h2>
+                                Product Name:
+                                <span t-field="o.name"/>
+                            </h2>
+                            <p>
+                                Calories:
+                                <span t-field="o.calories"/>
+                            </p>
+                            <p>
+                                Nutrition Score:
+                                <span t-field="o.nutrition_score"/>
+                            </p>
+                            <h3>Nutrition Details</h3>
+                            <t t-foreach="o.nutrient_ids" t-as="line">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <span t-field="line.nutrient_id.name"/>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <span t-field="line.value"/>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <span t-field="line.nutrient_id.uom_id.name"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <report id="dietfacts_product" model="product.template" string="Nutrition Products" report_type="qweb-pdf" name="product.nutrition" file="product.nutrition"/>
 
     </data>
 </odoo>
